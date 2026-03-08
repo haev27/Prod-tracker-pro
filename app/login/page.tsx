@@ -87,18 +87,16 @@ export default function LoginPage() {
         <div className="bg-background-light dark:bg-background-dark min-h-screen flex items-center justify-center font-display antialiased p-6">
             <div className="bg-white dark:bg-slate-900 shadow-2xl rounded-3xl w-full max-w-[540px] p-10 flex flex-col items-center border border-slate-200 dark:border-slate-800 transition-all">
 
-                <div className="mb-8 text-center">
-                    <img
-                        alt="AirLife Logo"
-                        className="h-10 w-auto brightness-0 dark:invert mx-auto"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgZeLXJHioccPwWGqUngQCu8YSkBZxdunFJ2h2W7La6yKNlNnCOUl2PzonKrcantSh56GtFI4-Re08gLIWzPc9fxwDAJeGNye9hTkfUqD2fdVaCTJDcC5iGj55cws7ppZ2JGRP5FPyUn37kEc2aVp_2LifKNzh_lw9K-RJxzQ7GtBrr3jYLEh-YF-K3ZTQnwoPj_6HnZh5KaZFMbZgUqjqBS3P5uHQA87Hd4pozxqwVzQmd8Bn_mzsU5N0XF2Q2I-xtjC_WO0GJGCI"
-                    />
-                    <span className="text-primary text-[10px] font-black uppercase tracking-[0.3em] mt-4 block">Production Terminal</span>
+                <div className="mb-10 text-center">
+                    <div className="bg-[#48abbc] h-12 w-12 rounded-lg flex items-center justify-center mx-auto mb-4 shadow-lg">
+                        <span className="text-white font-black text-[10px] tracking-tighter">AirLife</span>
+                    </div>
+                    <span className="text-[#6a7d90] text-[10px] font-black uppercase tracking-[0.3em] block">Production Terminal</span>
                 </div>
 
                 <div className="text-center mb-10">
-                    <h1 className="text-slate-900 dark:text-slate-100 text-4xl font-black tracking-tighter mb-2">Shift Entry</h1>
-                    <p className="text-slate-500 dark:text-slate-400 text-sm font-bold uppercase tracking-wider">Enter your PIN to begin</p>
+                    <h1 className="text-slate-900 dark:text-slate-100 text-3xl font-black tracking-tight mb-2">Shift Entry</h1>
+                    <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">Scan or enter your Badge ID to begin</p>
                 </div>
 
                 {error && (
@@ -110,64 +108,59 @@ export default function LoginPage() {
 
                 <div className="w-full mb-8">
                     <div className="relative">
-                        <div className="w-full h-24 flex items-center justify-center text-5xl font-black tracking-[0.3em] rounded-2xl border-2 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white transition-all shadow-inner">
+                        <div className="w-full h-20 flex items-center justify-center gap-4 rounded-xl border-2 border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800 transition-all">
                             {pin.padEnd(6, '•').split('').map((char, i) => (
-                                <span key={i} className={char === '•' ? 'text-slate-200 dark:text-slate-700' : 'text-primary'}>
-                                    {char}
-                                </span>
+                                <div key={i} className={`h-3 w-3 rounded-full ${char === '•' ? 'bg-slate-200 dark:bg-slate-700' : 'bg-[#6a7d90]'}`}></div>
                             ))}
-                        </div>
-                        <div className="absolute inset-y-0 right-6 flex items-center">
-                            <BadgeCheck size={24} className={pin.length === 6 ? 'text-emerald-500' : 'text-slate-300'} />
                         </div>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-3 gap-4 w-full mb-10">
+                <div className="grid grid-cols-3 gap-4 w-full mb-8">
                     {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map((num) => (
                         <button
                             key={num}
                             onClick={() => handleKeypadClick(num)}
                             disabled={isLoading}
-                            className="h-20 flex items-center justify-center rounded-2xl bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 text-2xl font-black text-slate-800 dark:text-slate-200 active:scale-95 active:bg-slate-200 transition-all hover:border-primary/50 disabled:opacity-50"
+                            className="h-20 flex items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-2xl font-bold text-slate-800 dark:text-slate-200 active:scale-95 active:bg-slate-100 transition-all hover:border-primary/30 disabled:opacity-50"
                         >
                             {num}
                         </button>
                     ))}
-                    <button onClick={handleBackspace} disabled={isLoading} className="h-20 flex items-center justify-center rounded-2xl bg-slate-100 dark:bg-slate-800/50 text-slate-400 active:scale-95 transition-all hover:text-red-500">
-                        <Delete size={28} />
+                    <button onClick={handleBackspace} disabled={isLoading} className="h-20 flex items-center justify-center rounded-xl bg-slate-50/50 dark:bg-slate-800/50 text-slate-400 active:scale-95 transition-all hover:text-red-500 border border-transparent">
+                        <Delete size={24} />
                     </button>
-                    <button onClick={() => handleKeypadClick('0')} disabled={isLoading} className="h-20 flex items-center justify-center rounded-2xl bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 text-2xl font-black text-slate-800 dark:text-slate-200 active:scale-95 active:bg-slate-200 transition-all hover:border-primary/50">
+                    <button onClick={() => handleKeypadClick('0')} disabled={isLoading} className="h-20 flex items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-2xl font-bold text-slate-800 dark:text-slate-200 active:scale-95 transition-all">
                         0
                     </button>
-                    <button onClick={() => setPin('')} disabled={isLoading} className="h-20 flex items-center justify-center rounded-2xl bg-slate-100 dark:bg-slate-800/50 text-slate-400 active:scale-95 transition-all hover:text-slate-900">
-                        <X size={28} />
+                    <button onClick={() => setPin('')} disabled={isLoading} className="h-20 flex items-center justify-center rounded-xl bg-slate-50/50 dark:bg-slate-800/50 text-slate-400 active:scale-95 transition-all hover:text-slate-900 border border-transparent">
+                        <X size={24} />
                     </button>
                 </div>
 
                 <button
                     onClick={handleLogin}
                     disabled={isLoading || pin.length < 6}
-                    className="w-full h-20 bg-primary hover:brightness-110 text-white rounded-2xl text-xl font-black tracking-widest shadow-2xl shadow-primary/20 transition-all flex items-center justify-center gap-4 active:scale-[0.98] uppercase disabled:opacity-50 disabled:grayscale"
+                    className="w-full h-16 bg-[#3498db] hover:bg-[#2980b9] text-white rounded-xl text-lg font-bold shadow-lg shadow-blue-500/20 transition-all flex items-center justify-center gap-3 active:scale-[0.98] uppercase disabled:opacity-50"
                 >
                     {isLoading ? (
                         <Loader2 className="animate-spin" size={24} />
                     ) : (
                         <>
                             <span>Start Shift</span>
-                            <LogIn size={24} strokeWidth={3} />
+                            <LogIn size={20} />
                         </>
                     )}
                 </button>
 
-                <div className="mt-10 flex items-center gap-8 text-slate-400 dark:text-slate-600 text-[10px] font-black uppercase tracking-[0.2em]">
-                    <div className="flex items-center gap-2">
-                        <Clock size={14} className="text-primary" />
-                        <span>{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                <div className="mt-10 flex items-center gap-8 text-slate-400 dark:text-slate-600 text-xs font-medium">
+                    <div className="flex items-center gap-1.5">
+                        <Clock size={14} />
+                        <span>System Time: {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-primary font-bold">
+                    <div className="flex items-center gap-1.5">
                         <Monitor size={14} />
-                        <span>TEST PIN: 123456</span>
+                        <span>Terminal A-12</span>
                     </div>
                 </div>
             </div>

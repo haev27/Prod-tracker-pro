@@ -39,8 +39,8 @@ export default function Home() {
             {/* Top Navigation Bar */}
             <header className="w-full bg-white dark:bg-background-dark border-b border-slate-200 dark:border-slate-800 px-6 py-4 flex items-center justify-between sticky top-0 z-50 shadow-sm">
                 <div className="flex items-center gap-4">
-                    <div className="h-10 w-10 bg-primary flex items-center justify-center rounded-lg text-white">
-                        <Factory size={24} />
+                    <div className="bg-[#48abbc] h-10 w-10 flex items-center justify-center rounded-lg text-white shadow-md">
+                        <span className="font-black text-[8px] tracking-tighter">AirLife</span>
                     </div>
                     <div>
                         <h1 className="text-xl font-black tracking-tighter text-airlife-blue dark:text-slate-100 uppercase leading-none">AirLife Hub</h1>
