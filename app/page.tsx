@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { db } from '../lib/db';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { ClipboardList, Plus, History, Wifi, WifiOff, ScanLine, Camera, X } from 'lucide-react';
+import { ClipboardList, Plus, History, Wifi, WifiOff, ScanLine, Camera, X, Activity } from 'lucide-react';
 import QRScanner from '../components/QRScanner';
 
 export default function RegistrationPage() {
@@ -30,7 +30,7 @@ export default function RegistrationPage() {
 
     const handleSave = async () => {
         const registro = {
-            sesion_catalogo_id: 'temp-session-id', // Will be dynamic in full implementation
+            sesion_catalogo_id: 'temp-session-id',
             hora_reloj: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
             cajas_producidas: cajas,
             eas_producidas: eas,
@@ -41,125 +41,219 @@ export default function RegistrationPage() {
         };
 
         await db.registros.add(registro);
-        // Reset inputs
         setCajas(0);
         setEas(0);
     };
 
     return (
-        <main className="min-h-screen p-4 md:p-8 max-w-4xl mx-auto space-y-6">
-            <header className="flex justify-between items-center card-glass">
-                <div className="flex items-center gap-3">
-                    <div className="p-3 bg-industrial-accent rounded-lg">
-                        <ClipboardList className="text-black" size={32} />
-                    </div>
-                    <div>
-                        <h1 className="text-3xl font-black uppercase tracking-tight">ProdTracker Pro</h1>
-                        <p className="text-industrial-accent font-mono text-sm">LINEA 01 - ENSAMBLE 1</p>
-                    </div>
-                </div>
-                <div className={`flex items-center gap-2 px-4 py-2 rounded-full ${isOnline ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
-                    {isOnline ? <Wifi size={20} /> : <WifiOff size={20} />}
-                    <span className="font-bold text-sm uppercase">{isOnline ? 'En Línea' : 'Offline'}</span>
-                </div>
-            </header>
-
-            <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Production Input */}
-                <div className="card-glass space-y-6">
-                    <h2 className="text-xl font-bold uppercase text-gray-400">Producción Real</h2>
-
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                            <label className="text-sm font-bold uppercase">Cajas</label>
-                            <input
-                                type="number"
-                                value={cajas}
-                                onChange={(e) => setCajas(parseInt(e.target.value) || 0)}
-                                className="w-full bg-white/10 text-5xl font-black p-6 rounded-xl border border-white/20 focus:border-industrial-accent outline-none text-center"
-                            />
+        <div className="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen p-4 md:p-8 flex justify-center">
+            <main className="w-full max-w-[1280px] bg-white dark:bg-slate-900 shadow-2xl rounded-xl flex flex-col overflow-hidden border border-slate-200 dark:border-slate-800">
+                {/* Header Navigation */}
+                <header className="flex items-center justify-between px-6 py-5 md:px-8 border-b border-slate-200 dark:border-slate-800">
+                    <div className="flex items-center gap-6">
+                        <div className="p-3 bg-primary/10 rounded-xl border border-primary/20">
+                            <ClipboardList className="text-primary" size={28} />
                         </div>
-                        <div className="space-y-2">
-                            <label className="text-sm font-bold uppercase">EAs</label>
-                            <input
-                                type="number"
-                                value={eas}
-                                onChange={(e) => setEas(parseInt(e.target.value) || 0)}
-                                className="w-full bg-white/10 text-5xl font-black p-6 rounded-xl border border-white/20 focus:border-industrial-accent outline-none text-center"
-                            />
+                        <div className="hidden md:block h-8 w-[1px] bg-slate-200 dark:bg-slate-700"></div>
+                        <div>
+                            <h1 className="text-2xl md:text-3xl font-black tracking-tight text-slate-900 dark:text-white uppercase">Linea 01</h1>
+                            <div className="flex items-center gap-2 mt-1">
+                                <span className={`relative flex h-3 w-3`}>
+                                    <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${isOnline ? 'bg-emerald-green' : 'bg-red-500'}`}></span>
+                                    <span className={`relative inline-flex rounded-full h-3 w-3 ${isOnline ? 'bg-emerald-green' : 'bg-red-500'}`}></span>
+                                </span>
+                                <span className={`text-xs font-bold uppercase tracking-wider ${isOnline ? 'text-emerald-green' : 'text-red-500'}`}>
+                                    {isOnline ? 'En Línea' : 'Sin Conexión'}
+                                </span>
+                            </div>
                         </div>
                     </div>
 
-                    <div className="flex gap-4">
-                        <button className="flex-1 btn-danger" onClick={() => { setCajas(0); setEas(0); }}>Borrar</button>
-                        <button className="flex-1 btn-primary flex justify-center items-center gap-2" onClick={handleSave}>
-                            <Plus strokeWidth={3} /> GUARDAR
+                    <div className="flex items-center gap-4">
+                        <div className="text-right mr-2 hidden sm:block">
+                            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Operador</p>
+                            <p className="text-lg font-semibold">Turno Actual</p>
+                        </div>
+                        <div className="h-12 w-12 rounded-full md:h-14 md:w-14 bg-primary/10 flex items-center justify-center border-2 border-primary/20">
+                            <Activity className="text-primary" />
+                        </div>
+                    </div>
+                </header>
+
+                <div className="flex-1 overflow-y-auto p-4 md:p-8 flex flex-col gap-6">
+                    <section className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+
+                        {/* Production Input */}
+                        <div className="lg:col-span-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-100 dark:border-slate-700/50 flex flex-col p-6 shadow-sm">
+                            <div className="flex justify-between items-center mb-6">
+                                <h2 className="text-sm font-bold text-slate-500 uppercase tracking-widest">Producción Real</h2>
+                                <span className="bg-primary/5 border border-primary/10 text-primary px-3 py-1.5 rounded-lg font-bold text-xs uppercase">Captura de Datos</span>
+                            </div>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1 items-center">
+                                <div className="space-y-3">
+                                    <label className="text-xs font-bold uppercase text-slate-400 tracking-widest block text-center">Cajas (Unidades)</label>
+                                    <div className="flex items-center justify-center gap-4">
+                                        <button onClick={() => setCajas(Math.max(0, cajas - 1))} className="h-12 w-12 rounded-xl bg-white dark:bg-slate-700 shadow border border-slate-200 dark:border-slate-600 flex items-center justify-center hover:bg-slate-50 dark:hover:bg-slate-600 active:scale-95 transition-all">
+                                            <span className="text-2xl font-black text-slate-400">-</span>
+                                        </button>
+                                        <input
+                                            type="number"
+                                            value={cajas}
+                                            onChange={(e) => setCajas(parseInt(e.target.value) || 0)}
+                                            className="w-24 md:w-32 bg-transparent text-5xl md:text-6xl font-black text-center focus:ring-0 outline-none text-slate-900 dark:text-white"
+                                        />
+                                        <button onClick={() => setCajas(cajas + 1)} className="h-12 w-12 rounded-xl bg-white dark:bg-slate-700 shadow border border-slate-200 dark:border-slate-600 flex items-center justify-center hover:bg-slate-50 dark:hover:bg-slate-600 active:scale-95 transition-all">
+                                            <span className="text-2xl font-black text-slate-400">+</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-3">
+                                    <label className="text-xs font-bold uppercase text-slate-400 tracking-widest block text-center">EAs (Sueltos)</label>
+                                    <div className="flex items-center justify-center gap-4">
+                                        <button onClick={() => setEas(Math.max(0, eas - 1))} className="h-12 w-12 rounded-xl bg-white dark:bg-slate-700 shadow border border-slate-200 dark:border-slate-600 flex items-center justify-center hover:bg-slate-50 dark:hover:bg-slate-600 active:scale-95 transition-all">
+                                            <span className="text-2xl font-black text-slate-400">-</span>
+                                        </button>
+                                        <input
+                                            type="number"
+                                            value={eas}
+                                            onChange={(e) => setEas(parseInt(e.target.value) || 0)}
+                                            className="w-24 md:w-32 bg-transparent text-5xl md:text-6xl font-black text-center focus:ring-0 outline-none text-slate-900 dark:text-white"
+                                        />
+                                        <button onClick={() => setEas(eas + 1)} className="h-12 w-12 rounded-xl bg-white dark:bg-slate-700 shadow border border-slate-200 dark:border-slate-600 flex items-center justify-center hover:bg-slate-50 dark:hover:bg-slate-600 active:scale-95 transition-all">
+                                            <span className="text-2xl font-black text-slate-400">+</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Resources Section*/}
+                        <div className="lg:col-span-2 flex flex-col gap-4">
+                            <div className="bg-emerald-green rounded-xl p-6 text-white flex flex-col justify-between shadow-xl shadow-emerald-green/20 h-full">
+                                <div className="flex justify-between items-start">
+                                    <p className="text-emerald-100 font-bold uppercase tracking-widest text-xs">Headcount Asignado</p>
+                                    <Activity className="opacity-50" size={20} />
+                                </div>
+                                <div className="mt-4 flex items-center justify-between gap-4">
+                                    <button onClick={() => setHeadcount(Math.max(1, headcount - 1))} className="h-12 w-12 rounded-full bg-black/10 hover:bg-black/20 flex items-center justify-center text-2xl font-bold transition-all">-</button>
+                                    <span className="text-6xl font-black">{headcount}</span>
+                                    <button onClick={() => setHeadcount(headcount + 1)} className="h-12 w-12 rounded-full bg-black/10 hover:bg-black/20 flex items-center justify-center text-2xl font-bold transition-all">+</button>
+                                </div>
+                            </div>
+
+                            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-6 border border-slate-100 dark:border-slate-700/50">
+                                <div className="flex justify-between font-bold text-xs uppercase tracking-widest mb-3">
+                                    <span className="text-slate-400">Tiempo Activo</span>
+                                    <span className={uptime < 60 ? 'text-red-500' : 'text-emerald-green'}>{uptime} min / 60</span>
+                                </div>
+                                <div className="h-4 w-full bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden mt-2 border border-slate-300 dark:border-slate-600">
+                                    <div className={`h-full rounded-full ${uptime < 60 ? 'bg-red-500' : 'bg-emerald-green'}`} style={{ width: `${(uptime / 60) * 100}%` }}></div>
+                                </div>
+                                <input
+                                    type="range"
+                                    min="0"
+                                    max="60"
+                                    value={uptime}
+                                    onChange={(e) => setUptime(parseInt(e.target.value))}
+                                    className="w-full mt-4"
+                                />
+                            </div>
+                        </div>
+                    </section>
+
+                    <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        {/* History Table */}
+                        <div className="card-glass flex flex-col p-6 bg-slate-50 border-slate-100 dark:bg-slate-800/50 dark:border-slate-700/50 rounded-xl overflow-hidden">
+                            <div className="flex items-center gap-2 mb-4">
+                                <History className="text-primary" size={20} />
+                                <h2 className="text-sm font-bold uppercase tracking-widest text-slate-500">Últimos Registros</h2>
+                            </div>
+                            <div className="overflow-x-auto flex-1">
+                                <table className="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr className="border-b border-slate-200 dark:border-slate-700 text-slate-400 text-xs uppercase tracking-widest">
+                                            <th className="py-3 px-2 font-bold">Hora</th>
+                                            <th className="py-3 px-2 font-bold">Resumen (C/E)</th>
+                                            <th className="py-3 px-2 font-bold">Estado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="text-sm">
+                                        {localRegistros?.map((reg) => (
+                                            <tr key={reg.id} className="border-b border-slate-100 dark:border-slate-800/50 hover:bg-white dark:hover:bg-slate-800 transition-colors">
+                                                <td className="py-3 px-2 font-mono font-bold">{reg.hora_reloj}</td>
+                                                <td className="py-3 px-2 font-black">{reg.cajas_producidas} / {reg.eas_producidas}</td>
+                                                <td className="py-3 px-2">
+                                                    <span className={`text-[10px] font-bold uppercase px-2 py-1 rounded-md border ${reg.synced ? 'bg-emerald-green/10 text-emerald-green border-emerald-green/20' : 'bg-primary/10 text-primary border-primary/20'}`}>
+                                                        {reg.synced ? 'Enviado' : 'Local'}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        {/* Scrap Section */}
+                        <div className="card-glass bg-slate-50 border-slate-100 dark:bg-slate-800/50 dark:border-slate-700/50 p-6 rounded-xl flex flex-col justify-center">
+                            <div className="text-center mb-6">
+                                <div className="h-16 w-16 bg-slate-200 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-slate-300 dark:border-slate-700">
+                                    <ScanLine size={28} className="text-slate-500" />
+                                </div>
+                                <h2 className="text-sm font-bold uppercase text-slate-500 tracking-widest">Material Retenido (Scrap)</h2>
+                                <p className="text-xs text-slate-400 mt-2 max-w-[200px] mx-auto">Escanea el código QR del componente para registrar anomalías.</p>
+                            </div>
+                            <div className="flex justify-center">
+                                <button
+                                    onClick={() => setIsScanning(true)}
+                                    className="px-6 py-3 bg-white dark:bg-slate-800 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition-all text-slate-700 dark:text-slate-300 font-bold border border-slate-300 dark:border-slate-600 flex items-center gap-3 shadow-sm"
+                                >
+                                    <Camera size={20} /> INICIAR ESCÁNER
+                                </button>
+                            </div>
+
+                            {lastQR && (
+                                <div className="mt-6 bg-primary/10 border border-primary/20 p-4 rounded-xl flex justify-between items-center">
+                                    <div className="flex items-center gap-3">
+                                        <div className="bg-primary p-2 rounded-lg">
+                                            <Camera size={16} className="text-white" />
+                                        </div>
+                                        <div>
+                                            <p className="text-[10px] uppercase font-bold text-slate-500">Último Escaneo:</p>
+                                            <p className="font-mono font-black text-sm">{lastQR}</p>
+                                        </div>
+                                    </div>
+                                    <button
+                                        onClick={() => setLastQR(null)}
+                                        className="text-slate-400 hover:text-red-500 transition-colors"
+                                    >
+                                        <X size={20} />
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    </section>
+                </div>
+
+                {/* Footer Action Bar */}
+                <footer className="bg-slate-100 dark:bg-slate-950 p-4 md:p-6 flex flex-col sm:flex-row gap-4 items-center justify-between border-t border-slate-200 dark:border-slate-800">
+                    <div className="flex gap-4 w-full sm:w-auto">
+                        <button className="flex-1 sm:flex-none h-14 md:h-16 px-6 rounded-xl bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-white flex items-center justify-center gap-3 transition-colors shadow-sm" onClick={() => { setCajas(0); setEas(0); }}>
+                            <X size={24} className="text-slate-400" />
+                            <span className="font-bold text-base uppercase tracking-wide">Limpiar</span>
                         </button>
                     </div>
-                </div>
 
-                {/* Headcount & Status */}
-                <div className="card-glass space-y-6">
-                    <h2 className="text-xl font-bold uppercase text-gray-400">Recursos y Tiempo</h2>
-
-                    <div className="space-y-4">
-                        <div className="flex justify-between items-center text-2xl">
-                            <span className="font-bold uppercase">Headcount</span>
-                            <div className="flex items-center gap-6">
-                                <button onClick={() => setHeadcount(Math.max(1, headcount - 1))} className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center text-4xl font-bold">-</button>
-                                <span className="font-black w-8 text-center">{headcount}</span>
-                                <button onClick={() => setHeadcount(headcount + 1)} className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center text-4xl font-bold">+</button>
-                            </div>
-                        </div>
-
-                        <div className="space-y-2 pt-4">
-                            <div className="flex justify-between font-bold uppercase text-sm">
-                                <span>Tiempo Activo</span>
-                                <span className={uptime < 60 ? 'text-industrial-danger' : 'text-industrial-success'}>{uptime} min / 60</span>
-                            </div>
-                            <input
-                                type="range"
-                                min="0"
-                                max="60"
-                                value={uptime}
-                                onChange={(e) => setUptime(parseInt(e.target.value))}
-                                className="w-full accent-industrial-accent h-3 rounded-lg appearance-none cursor-pointer bg-white/10"
-                            />
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Scrap Section */}
-            <section className="card-glass space-y-4">
-                <div className="flex justify-between items-center">
-                    <h2 className="text-xl font-bold uppercase text-gray-400">Registro de Scrap</h2>
-                    <button
-                        onClick={() => setIsScanning(true)}
-                        className="flex items-center gap-2 px-6 py-3 bg-white/10 rounded-xl hover:bg-white/20 transition-all text-industrial-accent font-bold border border-industrial-accent/30"
-                    >
-                        <ScanLine size={24} /> ESCANEAR QR
-                    </button>
-                </div>
-
-                {lastQR && (
-                    <div className="bg-industrial-accent/10 border border-industrial-accent/20 p-4 rounded-xl flex justify-between items-center animate-pulse">
-                        <div className="flex items-center gap-3">
-                            <Camera size={24} className="text-industrial-accent" />
-                            <div>
-                                <p className="text-xs uppercase font-bold text-gray-400">Material Detectado:</p>
-                                <p className="font-mono font-black">{lastQR}</p>
-                            </div>
-                        </div>
-                        <button
-                            onClick={() => setLastQR(null)}
-                            className="bg-industrial-danger/20 text-industrial-danger p-2 rounded-lg hover:bg-industrial-danger/40 transition-colors"
-                        >
-                            <X size={20} />
+                    <div className="w-full sm:w-auto flex-1 max-w-sm">
+                        <button className="w-full h-14 md:h-16 rounded-xl bg-primary hover:bg-primary/90 text-white flex items-center justify-center gap-3 transition-all active:scale-[0.98] shadow-lg shadow-primary/20" onClick={handleSave}>
+                            <Plus size={24} strokeWidth={3} />
+                            <span className="font-bold text-lg uppercase tracking-wider">Guardar Registro</span>
                         </button>
                     </div>
-                )}
-            </section>
+                </footer>
+            </main>
 
             {isScanning && (
                 <QRScanner
@@ -167,40 +261,6 @@ export default function RegistrationPage() {
                     onClose={() => setIsScanning(false)}
                 />
             )}
-
-            {/* History Table */}
-            <section className="card-glass overflow-hidden">
-                <div className="flex items-center gap-2 mb-4 px-2">
-                    <History className="text-industrial-accent" size={24} />
-                    <h2 className="text-xl font-bold uppercase">Últimos Registros</h2>
-                </div>
-                <div className="overflow-x-auto">
-                    <table className="w-full text-left">
-                        <thead>
-                            <tr className="border-b border-white/10 text-gray-400 text-sm uppercase">
-                                <th className="p-4">Hora</th>
-                                <th className="p-4">Cajas / EAs</th>
-                                <th className="p-4">HC</th>
-                                <th className="p-4">Estado</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {localRegistros?.map((reg) => (
-                                <tr key={reg.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                                    <td className="p-4 font-mono font-bold">{reg.hora_reloj}</td>
-                                    <td className="p-4 font-black">{reg.cajas_producidas} / {reg.eas_producidas}</td>
-                                    <td className="p-4 font-bold">{reg.headcount_hora}</td>
-                                    <td className="p-4">
-                                        <span className={`text-[10px] font-black uppercase px-2 py-1 rounded ${reg.synced ? 'bg-industrial-success/20 text-industrial-success' : 'bg-industrial-accent/20 text-industrial-accent'}`}>
-                                            {reg.synced ? 'Enviado' : 'Pendiente'}
-                                        </span>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-        </main>
+        </div>
     );
 }

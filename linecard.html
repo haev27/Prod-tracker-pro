@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#6a7d90",
+                        "background-light": "#f7f7f7",
+                        "background-dark": "#17191b",
+                        "emerald-green": "#078838",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<title>Production Line Tracking</title>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex items-center justify-center p-6">
+<!-- Tablet View Container (1280x800 focus) -->
+<div class="w-full max-w-[1280px] h-[800px] bg-white dark:bg-slate-900 shadow-2xl rounded-xl flex flex-col overflow-hidden border border-slate-200 dark:border-slate-800">
+<!-- Header Navigation -->
+<header class="flex items-center justify-between px-8 py-6 border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-6">
+<img alt="Company Logo" class="h-10 w-auto" data-alt="Minimalist industrial company logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgZeLXJHioccPwWGqUngQCu8YSkBZxdunFJ2h2W7La6yKNlNnCOUl2PzonKrcantSh56GtFI4-Re08gLIWzPc9fxwDAJeGNye9hTkfUqD2fdVaCTJDcC5iGj55cws7ppZ2JGRP5FPyUn37kEc2aVp_2LifKNzh_lw9K-RJxzQ7GtBrr3jYLEh-YF-K3ZTQnwoPj_6HnZh5KaZFMbZgUqjqBS3P5uHQA87Hd4pozxqwVzQmd8Bn_mzsU5N0XF2Q2I-xtjC_WO0GJGCI"/>
+<div class="h-8 w-[1px] bg-slate-200 dark:bg-slate-700"></div>
+<div>
+<h1 class="text-3xl font-black tracking-tight text-slate-900 dark:text-white uppercase">Line 01</h1>
+<div class="flex items-center gap-2 mt-1">
+<span class="relative flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-green opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-green"></span>
+</span>
+<span class="text-sm font-bold text-emerald-green uppercase tracking-wider">On-Target</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="text-right mr-4">
+<p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Shift Operator</p>
+<p class="text-lg font-semibold">Marcus Jensen</p>
+</div>
+<div class="size-14 rounded-full bg-primary/10 flex items-center justify-center border-2 border-primary/20">
+<span class="material-symbols-outlined text-primary text-3xl">person</span>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 flex gap-8 p-8 overflow-hidden">
+<!-- Production Counter Section (Left 60%) -->
+<div class="flex-[3] flex flex-col gap-6">
+<div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-8 flex-1 flex flex-col border border-slate-100 dark:border-slate-700/50">
+<div class="flex justify-between items-center mb-8">
+<h2 class="text-xl font-bold text-slate-500 uppercase tracking-widest">Current Output</h2>
+<span class="bg-primary/10 text-primary px-4 py-2 rounded-lg font-bold text-sm">Units: Cajas</span>
+</div>
+<div class="flex-1 flex items-center justify-between gap-12">
+<!-- Decrement Button -->
+<button class="h-32 w-32 rounded-2xl bg-white dark:bg-slate-700 shadow-lg border-2 border-slate-200 dark:border-slate-600 flex items-center justify-center hover:bg-slate-50 dark:hover:bg-slate-600 active:scale-95 transition-all group">
+<span class="material-symbols-outlined text-6xl text-slate-400 group-active:text-primary">remove</span>
+</button>
+<!-- Main Display -->
+<div class="flex-1 text-center">
+<input class="w-full bg-transparent border-none text-center text-[120px] font-black tracking-tighter text-slate-900 dark:text-white focus:ring-0" readonly="" type="text" value="1,248"/>
+<p class="text-slate-400 font-medium text-xl -mt-4">Target: 1,350</p>
+</div>
+<!-- Increment Button -->
+<button class="h-32 w-32 rounded-2xl bg-primary shadow-lg shadow-primary/30 flex items-center justify-center hover:brightness-110 active:scale-95 transition-all group">
+<span class="material-symbols-outlined text-6xl text-white">add</span>
+</button>
+</div>
+<div class="mt-8 pt-8 border-t border-slate-200 dark:border-slate-700">
+<div class="flex justify-between text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">
+<span>Line Progress</span>
+<span>92%</span>
+</div>
+<div class="h-4 w-full bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 92%;"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- KPI & Stats Section (Right 40%) -->
+<div class="flex-[2] flex flex-col gap-6">
+<!-- Efficiency Badge -->
+<div class="bg-emerald-green rounded-xl p-8 text-white flex flex-col justify-between shadow-xl shadow-emerald-900/10">
+<div class="flex justify-between items-start">
+<p class="text-emerald-100 font-bold uppercase tracking-widest">Efficiency</p>
+<span class="material-symbols-outlined opacity-50 text-3xl">speed</span>
+</div>
+<div class="mt-4 flex items-baseline gap-2">
+<span class="text-8xl font-black">94</span>
+<span class="text-4xl font-bold opacity-80">%</span>
+</div>
+<p class="mt-4 text-emerald-50 font-medium">+2.4% vs last hour</p>
+</div>
+<!-- Secondary Stats -->
+<div class="grid grid-cols-1 gap-4 flex-1">
+<div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-6 border border-slate-100 dark:border-slate-700/50 flex items-center justify-between">
+<div>
+<p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Current SKU</p>
+<p class="text-xl font-bold mt-1">CJ-450-X Premium</p>
+</div>
+<span class="material-symbols-outlined text-slate-300 text-4xl">inventory_2</span>
+</div>
+<div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-6 border border-slate-100 dark:border-slate-700/50 flex items-center justify-between">
+<div>
+<p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Runtime</p>
+<p class="text-xl font-bold mt-1">05h 42m</p>
+</div>
+<span class="material-symbols-outlined text-slate-300 text-4xl">timer</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer Action Bar -->
+<footer class="bg-slate-900 dark:bg-black p-6 flex gap-6 items-center">
+<div class="flex-1 flex gap-4">
+<!-- Scrap Button -->
+<button class="flex-1 h-20 rounded-xl bg-slate-800 hover:bg-slate-700 text-white flex items-center justify-center gap-4 transition-colors group">
+<span class="material-symbols-outlined text-4xl text-slate-400 group-hover:text-white">photo_camera</span>
+<span class="font-bold text-lg uppercase tracking-wide">Report Scrap</span>
+</button>
+<!-- Downtime Button -->
+<button class="flex-1 h-20 rounded-xl bg-amber-600/10 border-2 border-amber-600/30 hover:bg-amber-600/20 text-amber-500 flex items-center justify-center gap-4 transition-colors">
+<span class="material-symbols-outlined text-4xl">warning</span>
+<span class="font-bold text-lg uppercase tracking-wide">Downtime</span>
+</button>
+<!-- Switch Catalog Button -->
+<button class="flex-1 h-20 rounded-xl bg-primary hover:bg-primary/90 text-white flex items-center justify-center gap-4 transition-colors shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-4xl">swap_horiz</span>
+<span class="font-bold text-lg uppercase tracking-wide">Switch Catalog</span>
+</button>
+</div>
+<div class="h-14 w-[2px] bg-slate-800 mx-2"></div>
+<!-- Secondary Actions -->
+<div class="flex gap-4">
+<button class="h-20 w-20 rounded-xl bg-slate-800 hover:bg-slate-700 text-white flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-3xl">settings</span>
+</button>
+<button class="h-20 w-20 rounded-xl bg-red-600 hover:bg-red-700 text-white flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-3xl">emergency_home</span>
+</button>
+</div>
+</footer>
+</div>
+</body></html>

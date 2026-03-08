@@ -2,38 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 26, 26, 26;
-  --background-end-rgb: 0, 0, 0;
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-  min-height: 100vh;
+@layer base {
+  body {
+    @apply bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen;
+  }
 }
 
 /* Industrial Component Styles */
 @layer components {
   .btn-industrial {
-    @apply px-8 py-6 rounded-xl font-bold text-2xl uppercase transition-all active:scale-95 shadow-lg;
+    @apply px-8 py-5 rounded-xl font-bold text-xl uppercase transition-all active:scale-95 shadow-lg flex items-center justify-center gap-3;
   }
-  
+
   .btn-primary {
-    @apply btn-industrial bg-industrial-accent text-black hover:bg-yellow-300;
+    @apply btn-industrial bg-primary text-white hover:bg-opacity-90;
   }
 
   .btn-danger {
-    @apply btn-industrial bg-industrial-danger text-white hover:bg-red-600;
+    @apply btn-industrial bg-red-600 text-white hover:bg-red-700;
+  }
+
+  .btn-success {
+    @apply btn-industrial bg-emerald-green text-white hover:opacity-90;
   }
 
   .card-glass {
-    @apply bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6;
+    @apply bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-xl;
   }
 }
