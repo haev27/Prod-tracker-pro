@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { db } from '../lib/db';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { ClipboardList, Plus, History, CloudCheck, CloudOff, ScanLine, Camera, X } from 'lucide-react';
+import { ClipboardList, Plus, History, Cloud, CloudOff, ScanLine, Camera, X } from 'lucide-react';
 import QRScanner from '../components/QRScanner';
 
 export default function RegistrationPage() {
@@ -59,7 +59,7 @@ export default function RegistrationPage() {
                     </div>
                 </div>
                 <div className={`flex items-center gap-2 px-4 py-2 rounded-full ${isOnline ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
-                    {isOnline ? <CloudCheck size={20} /> : <CloudOff size={20} />}
+                    {isOnline ? <Cloud size={20} /> : <CloudOff size={20} />}
                     <span className="font-bold text-sm uppercase">{isOnline ? 'En Línea' : 'Offline'}</span>
                 </div>
             </header>
@@ -93,7 +93,7 @@ export default function RegistrationPage() {
                     <div className="flex gap-4">
                         <button className="flex-1 btn-danger" onClick={() => { setCajas(0); setEas(0); }}>Borrar</button>
                         <button className="flex-1 btn-primary flex justify-center items-center gap-2" onClick={handleSave}>
-                            <Plus weight="bold" /> GUARDAR
+                            <Plus strokeWidth={3} /> GUARDAR
                         </button>
                     </div>
                 </div>
