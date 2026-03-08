@@ -14,11 +14,24 @@ import {
     BarChart3
 } from 'lucide-react';
 
+import { useRouter } from 'next/navigation';
+import { db } from '@/lib/db';
+
 export default function Home() {
+    const router = useRouter();
     const userProfile = {
         name: "Juan Pérez",
         role: "Supervisor de Planta • Turno Mañana",
         area: "Planta Principal"
+    };
+
+    const handleLogout = async () => {
+        try {
+            await db.sessions.where('is_active').equals(1).modify({ is_active: false, end_time: new Date().toISOString() });
+            router.push('/login');
+        } catch (err) {
+            console.error("Logout failed", err);
+        }
     };
 
     return (
@@ -40,7 +53,10 @@ export default function Home() {
                         <p className="text-sm font-black text-slate-900 dark:text-slate-100">{userProfile.name}</p>
                         <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">{userProfile.role}</p>
                     </div>
-                    <button className="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors px-4 py-2.5 rounded-xl text-xs font-black text-slate-700 dark:text-white uppercase tracking-wider">
+                    <button
+                        onClick={handleLogout}
+                        className="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors px-4 py-2.5 rounded-xl text-xs font-black text-slate-700 dark:text-white uppercase tracking-wider"
+                    >
                         <LogOut size={16} />
                         Cerrar Sesión
                     </button>

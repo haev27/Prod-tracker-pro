@@ -9,6 +9,8 @@ export const metadata: Metadata = {
     description: 'Sistema de Inteligencia Operacional Industrial',
 }
 
+import AuthGuard from '@/components/auth/AuthGuard'
+
 export default function RootLayout({
     children,
 }: {
@@ -16,7 +18,11 @@ export default function RootLayout({
 }) {
     return (
         <html lang="es">
-            <body className={inter.className}>{children}</body>
+            <body className={inter.className}>
+                <AuthGuard>
+                    {children}
+                </AuthGuard>
+            </body>
         </html>
     )
 }
