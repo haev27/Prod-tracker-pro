@@ -2,7 +2,7 @@ import { db } from './db';
 import { supabase } from './supabase';
 
 export const syncOfflineData = async () => {
-    const unsynced = await db.registros.where('synced').equals(false).toArray();
+    const unsynced = await db.registros.filter(r => !r.synced).toArray();
 
     if (unsynced.length === 0) return;
 

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { db } from '../lib/db';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { ClipboardList, Plus, History, Cloud, CloudOff, ScanLine, Camera, X } from 'lucide-react';
+import { ClipboardList, Plus, History, Wifi, WifiOff, ScanLine, Camera, X } from 'lucide-react';
 import QRScanner from '../components/QRScanner';
 
 export default function RegistrationPage() {
@@ -59,7 +59,7 @@ export default function RegistrationPage() {
                     </div>
                 </div>
                 <div className={`flex items-center gap-2 px-4 py-2 rounded-full ${isOnline ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
-                    {isOnline ? <Cloud size={20} /> : <CloudOff size={20} />}
+                    {isOnline ? <Wifi size={20} /> : <WifiOff size={20} />}
                     <span className="font-bold text-sm uppercase">{isOnline ? 'En Línea' : 'Offline'}</span>
                 </div>
             </header>
