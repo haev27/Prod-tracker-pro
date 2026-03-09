@@ -1,0 +1,17 @@
+{
+  "name": "ProdTracker Pro",
+  "short_name": "ProdTracker",
+  "description": "Control de producción industrial en tiempo real",
+  "start_url": "/hourly-production",
+  "display": "standalone",
+  "background_color": "#17191b",
+  "theme_color": "#6a7d90",
+  "icons": [
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
